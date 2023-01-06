@@ -1,28 +1,25 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HeaderNav/>
+    <TrelloBoard/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TrelloBoard from './components/TrelloBoard.vue';
+import HeaderNav from './components/HeaderNav.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TrelloBoard,
+    HeaderNav
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body{
+  margin: 0 !important;
 }
 </style>
