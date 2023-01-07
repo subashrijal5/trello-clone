@@ -2,7 +2,7 @@
     <div class="list">
         <div class="single-column">
             <div class="card" v-if="isAddingNew">
-                <primary-input :value="title" @input="handleSetTitle" @focusout="isAddingNew = false" />
+                <primary-input :value="title" @input="handleSetTitle"  @focusout="title =='' ? isAddingNew = false : null" />
                 <primary-button :onclick="storeColumn">Save</primary-button>
             </div>
             <primary-button :onclick="addColumn" v-else>Add List</primary-button>
