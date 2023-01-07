@@ -2,6 +2,7 @@ import axios from "axios";
 import Vue from "vue";
 import App from "./App.vue";
 import UnauthorizedPage from "./Pages/UnauthorizedPage.vue";
+import VModal from 'vue-js-modal'
 
 let MountComponent = App;
 const checkAccessToken = () => {
@@ -20,7 +21,7 @@ const axiosConfig = {
 };
 Vue.prototype.$axios = axios.create(axiosConfig);
 Vue.config.productionTip = false;
-
+Vue.use(VModal)
 new Vue({
   beforeCreate() {
     checkAccessToken();

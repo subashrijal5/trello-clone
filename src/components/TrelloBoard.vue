@@ -2,7 +2,7 @@
     <main>
         <div class="board">
             <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.tasks"
-                @store-card="storeTask" @column-update="updateColumn" />
+                @store-card="storeTask" @update-card="updateCard" />
             <add-column @store-column="storeColumn" />
         </div>
     </main>
@@ -42,7 +42,7 @@ export default {
             })
         },
 
-        async updateColumn(col) {
+        async updateCard(col) {
             await this.$axios.patch(`/tasks/${col.id}/update`, col).then(() => {
                 this.getData()
             }).catch((e) => {
