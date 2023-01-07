@@ -85,7 +85,7 @@ export default {
         .modal-description {
             font-size: 1.25rem;
             margin-bottom: 1rem;
-            overflow-y: scroll;
+            overflow-y: overlay;
             max-height: 40vh;
         }
 

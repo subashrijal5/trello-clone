@@ -45,7 +45,7 @@ export default {
         },
         onAdd(e){
            if(e.added){
-               this.$emit('column-update', { id: e.added.element.id, task_group_id: this.column.id, type: 'statusupdate' })
+               this.$emit('update-card', { id: e.added.element.id, task_group_id: this.column.id, type: 'statusupdate' })
            }
         }
     },

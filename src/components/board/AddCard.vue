@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card" v-if="isAddingNew">
-            <primary-input :value="title" @input="handleSetTitle" />
+            <primary-input :value="title" @input="handleSetTitle" @focusout="isAddingNew = false"/>
             <primary-button :onclick="storeCard">Save</primary-button>
         </div>
         <primary-button :onclick="addCard" v-else>Add Card</primary-button>

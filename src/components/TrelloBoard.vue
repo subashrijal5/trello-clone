@@ -1,5 +1,19 @@
 <template>
     <main>
+        <div class="row">
+            <div class="column">
+                <label for="date-picker">Date:</label>
+                <input v-model="date" type="date" id="date-picker">
+            </div>
+            <div class="column">
+                <label for="dropdown">Status:</label>
+                <select v-model="status" id="dropdown">
+                    <option value="">Select one</option>
+                    <option value="1">Active</option>
+                    <option value="0">Deleted</option>
+                </select>
+            </div>
+        </div>
         <div class="board">
             <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.tasks"
                 @store-card="storeTask" @update-card="updateCard" />
@@ -21,8 +35,18 @@ export default {
     },
     data() {
         return {
-            columnsData: []
+            columnsData: [],
+            date: null,
+            status: null
         }
+    },
+    watch: {
+        status: function () {
+            this.getData()
+        },
+        date: function () {
+            this.getData()
+        },
     },
     methods: {
         async storeTask(dat) {
@@ -51,7 +75,12 @@ export default {
         },
 
         async getData() {
-            this.$axios.get('/tasks-groups').then((res) => {
+            await this.$axios.get('/tasks-groups', {
+                params: {
+                    date: this.date,
+                    status: this.status
+                }
+            }).then((res) => {
                 this.columnsData = res.data
             }).catch((err) => {
                 console.log(err);
@@ -64,7 +93,7 @@ export default {
 // Style the main element
 main {
     padding: 10px;
-    overflow-x: scroll;
+    overflow-x: overlay;
 
     .board {
         display: flex;
@@ -85,7 +114,7 @@ main {
             padding: 10px;
             background-color: white;
             max-height: 85vh;
-            overflow-y: scroll;
+            overflow-y: overlay;
             flex: 0 0 20em;
 
             // Style the h2 element in the list
@@ -101,6 +130,7 @@ main {
                 background-color: white;
                 margin: 10px;
                 cursor: pointer;
+                overflow: hidden;
 
                 &:hover {
                     background-color: #F3F3F3;
@@ -108,5 +138,31 @@ main {
             }
         }
     }
+
+    .row {
+        display: flex;
+        align-items: center;
+        align-items: flex-end;
+        justify-content: center;
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+
+            label {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            input[type="date"],
+            select {
+                padding: 0.5rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+        }
+    }
+
 }
 </style>
