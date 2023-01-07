@@ -1,6 +1,9 @@
 <template>
     <div @click="openModal">
-        <div class="card">{{ card.title }}</div>
+        <div class="card">
+            <div>{{ card.title }}</div>
+            <button v-if="card.deleted_at == null" @click="deleteCard">X</button>
+        </div>
         <card-modal :name="'modal_' + card.id">
             <div class="detail-task-modal">
                 <div class="modal-header" v-if="!isEditing">
@@ -51,11 +54,24 @@ export default {
             this.$emit('update-card', { ...this.cardData })
             this.isEditing = false
         },
+        deleteCard(){
+            this.$emit('delete-card', {id: this.card.id })
+        }
     }
 }
 </script>
 
 <style lang="scss">
+.card {
+    display: flex;
+    justify-content: space-between;
+    button{
+        background: red;
+        border: none;
+        color: #fff;
+    }
+}
+
 .detail-task-modal {
     padding: 20px;
 
@@ -102,7 +118,7 @@ export default {
             }
 
             textarea {
-               height: 10rem;
+                height: 10rem;
             }
 
             .button-container {

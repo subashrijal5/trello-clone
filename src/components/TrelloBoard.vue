@@ -16,7 +16,7 @@
         </div>
         <div class="board">
             <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.tasks"
-                @store-card="storeTask" @update-card="updateCard" />
+                @store-card="storeTask" @update-card="updateCard" @delete-card="deleteCard" />
             <add-column @store-column="storeColumn" />
         </div>
     </main>
@@ -68,6 +68,13 @@ export default {
 
         async updateCard(col) {
             await this.$axios.patch(`/tasks/${col.id}/update`, col).then(() => {
+                this.getData()
+            }).catch((e) => {
+                alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+            })
+        },
+        async deleteCard(col) {
+            await this.$axios.delete(`/tasks/${col.id}`, col).then(() => {
                 this.getData()
             }).catch((e) => {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
