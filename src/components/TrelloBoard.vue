@@ -1,8 +1,8 @@
 <template>
     <main>
         <div class="board">
-            <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.cards"
-                @store-card="onstore" />
+            <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.tasks"
+                @store-card="storeTask" />
             <add-column @store-column="storeColumn" />
         </div>
     </main>
@@ -14,122 +14,39 @@ export default {
     name: "TrelloBoard",
     components: {
         SingleColumn,
-        AddColumn
+        AddColumn,
+    },
+    created() {
+        this.getData()
     },
     data() {
         return {
-            columnsData: [
-                {
-                    title: 'Col 1',
-                    slug: 'col-1',
-                    cards: [{
-                        id: 1,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 2,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 3,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 4,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    ]
-                },
-                {
-                    title: 'Col 2',
-                    slug: 'col-2',
-                    cards: [{
-                        id: 5,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 6,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 7,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 8,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    ]
-                },
-                {
-                    title: 'Col 3',
-                    slug: 'col-3',
-                    cards: [{
-                        id: 1,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 2,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 3,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 4,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    ]
-                },
-                {
-                    title: 'Col 4',
-                    slug: 'col-4',
-                    cards: [{
-                        id: 1,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 6,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 9,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    {
-                        id: 10,
-                        title: 'Card 1',
-                        description: 'lorem ipsumm  sfsdzfs dc '
-                    },
-                    ]
-                },
-            ]
+            columnsData: []
         }
     },
     methods: {
-        onstore(dat) {
-            let cardcol = this.columnsData.find((col) => col.slug == dat.slug)
-            cardcol.cards.push(dat)
+        async storeTask(dat) {
+            await this.$axios.post('/tasks/store', { ...dat }).then(() => {
+                this.getData()
+            }).catch((e) => {
+                alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+            })
 
         },
-        storeColumn(col){
-            this.columnsData.push(col)
+        async storeColumn(col) {
+            await this.$axios.post('/tasks-groups/store', col).then((res) => {
+                this.columnsData.push(res.data.data)
+            }).catch((e) => {
+                alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+            })
+        },
+        async getData() {
+            this.$axios.get('/tasks-groups').then((res) => {
+                this.columnsData = res.data
+                console.log(res.data);
+            }).catch((err) => {
+                console.log(err);   
+            })
         }
     }
 }
@@ -158,7 +75,7 @@ main {
         .list {
             padding: 10px;
             background-color: white;
-            height: 85vh;
+            max-height: 85vh;
             overflow-y: scroll;
             flex: 0 0 20em;
 

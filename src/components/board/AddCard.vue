@@ -26,7 +26,7 @@ export default {
             this.isAddingNew = true
         },
         storeCard() {
-            this.$emit('store-card',{title: this.title, id: Math.random(), description: ''})
+            this.$emit('store-card',{title: this.title,  description: ''})
             this.isAddingNew = false
             this.title = '' 
         },
