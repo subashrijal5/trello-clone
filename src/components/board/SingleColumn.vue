@@ -2,7 +2,7 @@
     <div class="single-column">
         <div class="list">
             <h2>{{ column.title }}</h2>
-            <draggable @add="onAdd" v-model="cardlist" group="test"  @start="drag = true" @end="drag = false">
+            <draggable @change="onAdd" v-model="cardlist" group="test"  @start="drag = true" @end="drag = false">
                 <single-card v-for="card in cardlist" :key="card.id" :card="card" />
             </draggable>
             <add-card @store-card="storeCard" />
@@ -44,7 +44,9 @@ export default {
             this.$emit('store-card', { ...dat, task_group_id: this.column.id })
         },
         onAdd(e){
-            console.log(this.column, e);
+           if(e.added){
+               this.$emit('column-update', { id: e.added.element.id, task_group_id: this.column.id, type: 'statusupdate' })
+           }
         }
     },
 

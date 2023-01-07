@@ -2,7 +2,7 @@
     <main>
         <div class="board">
             <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.tasks"
-                @store-card="storeTask" />
+                @store-card="storeTask" @column-update="updateColumn" />
             <add-column @store-column="storeColumn" />
         </div>
     </main>
@@ -33,6 +33,7 @@ export default {
             })
 
         },
+
         async storeColumn(col) {
             await this.$axios.post('/tasks-groups/store', col).then((res) => {
                 this.columnsData.push(res.data.data)
@@ -40,12 +41,20 @@ export default {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
             })
         },
+
+        async updateColumn(col) {
+            await this.$axios.patch(`/tasks/${col.id}/update`, col).then(() => {
+                this.getData()
+            }).catch((e) => {
+                alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+            })
+        },
+
         async getData() {
             this.$axios.get('/tasks-groups').then((res) => {
                 this.columnsData = res.data
-                console.log(res.data);
             }).catch((err) => {
-                console.log(err);   
+                console.log(err);
             })
         }
     }

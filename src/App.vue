@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <HeaderNav/>
-    <TrelloBoard/>
+    <HeaderNav />
+    <TrelloBoard />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 </script>
 
 <style lang="scss">
-body{
+body {
   margin: 0 !important;
 }
 </style>

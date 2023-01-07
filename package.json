@@ -11,6 +11,7 @@
     "axios": "^1.2.2",
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
+    "vue-js-modal": "^2.0.1",
     "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
