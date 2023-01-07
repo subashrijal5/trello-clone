@@ -2,7 +2,7 @@
     <div @click="openModal">
         <div class=" card header-row">
             <div>{{ card.title }}</div>
-            <button title="Delete Card" v-if="card.deleted_at == null" @click="deleteCard">X</button>
+            <button title="Delete Card" v-if="card.deleted_at == null" @click.prevent.stop="deleteCard">X</button>
         </div>
         <card-modal :name="'modal_' + card.id">
             <div class="detail-task-modal">
