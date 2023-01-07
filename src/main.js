@@ -5,18 +5,25 @@ import UnauthorizedPage from "./Pages/UnauthorizedPage.vue";
 import VModal from 'vue-js-modal'
 
 let MountComponent = App;
-const checkAccessToken = () => {
+
+function getParamAccessToken(){
   const url = window.location.href;
   const params = new URLSearchParams(url.split("?")[1]);
-  const paramValue = params.get("access_token");
-
-  if (paramValue !== process.env.VUE_APP_ACCESS_TOKEN) {
+  return  params.get("access_token");
+}
+const checkAccessToken = () => {
+  if (getParamAccessToken() !== process.env.VUE_APP_ACCESS_TOKEN) {
     MountComponent = UnauthorizedPage;
   }
 };
 
+
+
 const axiosConfig = {
   baseURL: process.env.VUE_APP_API_BASE_URL,
+  params: {
+    access_token: getParamAccessToken()
+  },
   timeout: 30000,
 };
 Vue.prototype.$axios = axios.create(axiosConfig);

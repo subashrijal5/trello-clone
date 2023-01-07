@@ -16,10 +16,11 @@
         </div>
         <div class="board">
             <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.tasks"
-                @store-card="storeTask" @update-card="updateCard" @delete-card="deleteCard" @delete-column="deleteColumn" />
+                @store-card="storeTask" @update-card="updateCard" @delete-card="deleteCard"
+                @delete-column="deleteColumn" />
             <add-column @store-column="storeColumn" />
         </div>
-        <export-db/>
+        <export-db />
     </main>
 </template>
 <script>
@@ -29,10 +30,10 @@ import SingleColumn from './board/SingleColumn.vue';
 export default {
     name: "TrelloBoard",
     components: {
-    SingleColumn,
-    AddColumn,
-    ExportDb
-},
+        SingleColumn,
+        AddColumn,
+        ExportDb
+    },
 
     created() {
         this.getData()
@@ -63,7 +64,6 @@ export default {
             }).catch((e) => {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
             })
-
         },
 
         async storeColumn(col) {
@@ -71,6 +71,7 @@ export default {
                 this.columnsData.push(res.data.data)
             }).catch((e) => {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+                this.redirectUnauthorized(e.response.status)
             })
         },
 
@@ -79,6 +80,7 @@ export default {
                 this.getData()
             }).catch((e) => {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+                this.redirectUnauthorized(e.response.status)
             })
         },
         async deleteCard(col) {
@@ -86,6 +88,7 @@ export default {
                 this.getData()
             }).catch((e) => {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+                this.redirectUnauthorized(e.response.status)
             })
         },
 
@@ -94,6 +97,7 @@ export default {
                 this.getData()
             }).catch((e) => {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+                this.redirectUnauthorized(e.response.status)
             })
         },
 
@@ -106,8 +110,14 @@ export default {
             }).then((res) => {
                 this.columnsData = res.data
             }).catch((err) => {
-                console.log(err);
+                this.redirectUnauthorized(err.response.status)
             })
+        },
+        redirectUnauthorized(status) {
+            if (status == 401) {
+                window.location.href = '/unauthorized'
+
+            }
         }
     }
 }
