@@ -5,7 +5,7 @@
 export default {
     methods:{
         exportDb(){
-            window.open(process.env.VUE_APP_API_BASE_URL + '/export-db', '_blank')
+            window.open(process.env.VUE_APP_API_BASE_URL + '/export-db?access_token='+ process.env.VUE_APP_ACCESS_TOKEN, '_blank')
         }
     }
 }
