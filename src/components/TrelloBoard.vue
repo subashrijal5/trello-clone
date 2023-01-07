@@ -16,23 +16,28 @@
         </div>
         <div class="board">
             <SingleColumn v-for="column in columnsData" :key="column.slug" :column="column" :cards="column.tasks"
-                @store-card="storeTask" @update-card="updateCard" @delete-card="deleteCard" />
+                @store-card="storeTask" @update-card="updateCard" @delete-card="deleteCard" @delete-column="deleteColumn" />
             <add-column @store-column="storeColumn" />
         </div>
+        <export-db/>
     </main>
 </template>
 <script>
 import AddColumn from './board/AddColumn.vue';
+import ExportDb from './board/ExportDb.vue';
 import SingleColumn from './board/SingleColumn.vue';
 export default {
     name: "TrelloBoard",
     components: {
-        SingleColumn,
-        AddColumn,
-    },
+    SingleColumn,
+    AddColumn,
+    ExportDb
+},
+
     created() {
         this.getData()
     },
+
     data() {
         return {
             columnsData: [],
@@ -40,6 +45,7 @@ export default {
             status: null
         }
     },
+
     watch: {
         status: function () {
             this.getData()
@@ -48,7 +54,9 @@ export default {
             this.getData()
         },
     },
+
     methods: {
+
         async storeTask(dat) {
             await this.$axios.post('/tasks/store', { ...dat }).then(() => {
                 this.getData()
@@ -75,6 +83,14 @@ export default {
         },
         async deleteCard(col) {
             await this.$axios.delete(`/tasks/${col.id}`, col).then(() => {
+                this.getData()
+            }).catch((e) => {
+                alert(e.response.data.messsge ?? "Something went wrong, Please try again")
+            })
+        },
+
+        async deleteColumn(col) {
+            await this.$axios.delete(`/tasks-groups/${col.id}`, col).then(() => {
                 this.getData()
             }).catch((e) => {
                 alert(e.response.data.messsge ?? "Something went wrong, Please try again")
@@ -128,6 +144,19 @@ main {
             h2 {
                 margin: 0;
                 color: #172B4D;
+            }
+
+            .title {
+                display: flex;
+                justify-content: space-between;
+
+                button {
+                    background: red;
+                    border: none;
+                    color: #fff;
+                    font-size: 20px;
+                    border-radius: 50%;
+                }
             }
 
             // Style the card elements in the list

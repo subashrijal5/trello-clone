@@ -1,8 +1,8 @@
 <template>
     <div @click="openModal">
-        <div class="card">
+        <div class=" card header-row">
             <div>{{ card.title }}</div>
-            <button v-if="card.deleted_at == null" @click="deleteCard">X</button>
+            <button title="Delete Card" v-if="card.deleted_at == null" @click="deleteCard">X</button>
         </div>
         <card-modal :name="'modal_' + card.id">
             <div class="detail-task-modal">
@@ -62,13 +62,14 @@ export default {
 </script>
 
 <style lang="scss">
-.card {
+.header-row {
     display: flex;
     justify-content: space-between;
     button{
-        background: red;
+        background: rgb(197, 7, 7);
         border: none;
         color: #fff;
+        border-radius: 50%;
     }
 }
 
